@@ -1,0 +1,14 @@
+Babel==2.6.0
+Click==7.0
+Flask==1.0.2
+itsdangerous==1.1.0
+Jinja2==2.10.1
+MarkupSafe==1.1.1
+Pillow==6.0.0
+py-money==0.4.0
+pytz==2019.1
+pyzbar==0.1.8
+qrcode==6.1
+qrtools==0.0.2
+six==1.12.0
+Werkzeug==0.15.2
