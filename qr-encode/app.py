@@ -38,3 +38,6 @@ def encode():
     except Exception as e:
         logging.error(traceback.format_exc())
         return "Error generating QR code."
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8080)
