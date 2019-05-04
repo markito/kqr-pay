@@ -17,6 +17,10 @@ On this step we are going to build the application using `docker build`, assumin
 
 ## Build container for Quarkus App 
 
-For the Quarkus version of the application, in order to compile the application to a native format, Quarkus offers some specific built-in plugin integrated with `Maven` that allows for a streamlined experience to produce containers.
+For the Quarkus version of the application, in order to compile the application to a native format, Quarkus offers some specific built-in plugin integrated with `Maven` that allows for a streamlined experience to produce containers.  From the `quarkus-kiosk` directory you can execute:
 
-`./mvnw package -Pnative -Dnative-image.docker-build=true`
+1. Build the application
+`./mvnw package  -Dnative-image.docker-build=true`
+
+2. Build the container using JVM
+`docker build -f src/main/docker/Dockerfile.jvm -t markito/quarkus-decoder:v1 .`
