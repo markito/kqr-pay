@@ -12,6 +12,7 @@ from money.money import Money
 import traceback
 import logging
 import qrcode
+import signal
 
 app = Flask(__name__)
 DEFAULT_ID = "-1111111111"
