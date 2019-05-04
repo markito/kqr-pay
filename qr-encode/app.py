@@ -12,6 +12,8 @@ from money.money import Money
 import traceback
 import logging
 import qrcode
+import signal
+import sys
 
 app = Flask(__name__)
 DEFAULT_ID = "-1111111111"
@@ -39,5 +41,10 @@ def encode():
         logging.error(traceback.format_exc())
         return "Error generating QR code."
 
+def signal_term_handler(signal, frame):
+    logging.warning('got SIGTERM')
+    sys.exit(0)
+
 if __name__ == "__main__":
+    signal.signal(signal.SIGTERM, signal_term_handler)
     app.run(host='0.0.0.0', port=8080)
