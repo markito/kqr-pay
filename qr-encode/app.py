@@ -13,6 +13,7 @@ import traceback
 import logging
 import qrcode
 import signal
+import sys
 
 app = Flask(__name__)
 DEFAULT_ID = "-1111111111"
