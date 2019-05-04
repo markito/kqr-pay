@@ -7,7 +7,8 @@ from money.money import Money
 from flask import Flask, flash, request, redirect, url_for
 from pyzbar.pyzbar import decode
 from PIL import Image, ImageEnhance
-
+import signal
+import sys
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
@@ -16,6 +17,10 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def signal_term_handler(signal, frame):
+    logging.warning('Received SIGTERM')
+    sys.exit(0)
+
 '''
     Return data field value from QRcode
 '''
@@ -23,14 +28,16 @@ def _decode(image):
     local_image = Image.open(image)
     local_image = ImageEnhance.Contrast(local_image).enhance(4.0)
     decodedObjects = decode(local_image)
-    # only for demo
+    # log only for demo
     for obj in decodedObjects:
         print('Type : ', obj.type)
         print('Data : ', obj.data,'\n')  
     if (decodedObjects[0].data):
         return decodedObjects[0].data 
     else:
-        flash("No data found on this QRcode.")
+        msg = "No data found on this QRcode."
+        flash(msg)
+        return msg
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -44,7 +51,7 @@ def upload_file():
 
         if file and allowed_file(file.filename):
             return _decode(file)
-    # don't this at home - use templates
+    # don't do this at home - use templates
     return '''
     <!doctype html>
     <title>Payment System - Upload the QR Code</title>
@@ -57,4 +64,5 @@ def upload_file():
     '''
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGTERM, signal_term_handler)
     app.run(host='0.0.0.0', port=8080)

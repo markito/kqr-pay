@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/bin/python
 #########
 ## QRGenerator
@@ -26,23 +27,26 @@ def _serve_pil_image(pil_img):
 
 @app.route('/encode', methods=['GET', 'POST'])
 def encode():
+    # origin location for the transaction
     source = request.args.get('source', default = "Red Hat Summit 2019", type = str)
-    id = request.args.get('id', default = DEFAULT_ID, type = str)
+    # transaction id
+    txId = request.args.get('id', default = DEFAULT_ID, type = str)
     amount = request.args.get('amount', default = "0.0", type = str)
+    # transaction total
     try:
-        if (id == DEFAULT_ID):
-            img = qrcode.make(source + ";" + id + ";" + amount)
+        if (txId == DEFAULT_ID):
+            img = qrcode.make(source + ";" + txId + ";" + amount)
             return _serve_pil_image(img)
         else: 
             money_amount = Money(amount, Currency.USD)
-            img = qrcode.make(source + ";" + id + ";" + money_amount.format('en_US'))
+            img = qrcode.make(source + ";" + txId + ";" + money_amount.format('en_US'))
         return _serve_pil_image(img)
     except Exception as e:
         logging.error(traceback.format_exc())
-        return "Error generating QR code."
+        return "Error generating QR code for this transaction."
 
 def signal_term_handler(signal, frame):
-    logging.warning('got SIGTERM')
+    logging.warning('Received SIGTERM')
     sys.exit(0)
 
 if __name__ == "__main__":
