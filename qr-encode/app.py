@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/bin/python
 #########
-## QRGenerator
+## QR code generator for in-store kiosk
 #########
 
 from flask import Flask, send_file
