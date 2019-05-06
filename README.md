@@ -3,7 +3,7 @@ Sample serverless QR payment system using Knative.
 
 # Application Architecture
 
-[!img/arch.png]
+![Architecture Diagram](img/arch.png?raw=true "Architecture Diagram")
 
 QR (quick response) codes are increasing in popularity for a variety of use cases, from loyaty programs to complete **cashless** payment systems, which is what we will simulate on this tutorial as a sample serverless application.
 
