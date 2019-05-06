@@ -20,10 +20,9 @@ The serverless aspects of the application allow for the system to auto-scale bas
     - Knative v0.4+ 
     - Tekton v0.1+
     - Istio and Kiali
+    - Knative OpenShift Ingress 
+        `oc apply --filename https://github.com/bbrowning/knative-openshift-ingress/releases/download/v0.0.1/release.yaml`
 - `kn`, `knctl`, `s2i` and `docker` on the development environment.
-- Knative OpenShift Ingress 
-
-`oc apply --filename https://github.com/bbrowning/knative-openshift-ingress/releases/download/v0.0.1/release.yaml`
 
 ## Setup 
 Let's start by creating one of the services using `kn` - Which is the official Knative CLI, still in early stages and under development. At the time I'm writing this there are no released builds for `kn` yet, so you will have to build one manually following [these instructions](https://github.com/knative/client/blob/master/DEVELOPMENT.md#building-knative-client).
