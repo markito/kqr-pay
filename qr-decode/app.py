@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/bin/python
 #########
-## QRReader payment app
+## QR reader payment app
 #########
 from money.money import Money
 from flask import Flask, flash, request, redirect, url_for

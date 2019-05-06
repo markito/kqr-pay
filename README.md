@@ -51,13 +51,13 @@ Push the image to a container registry. For example: `docker push markito/qr-dec
 
 ## Create the kiosk-encoder service:
 
-`kn service create kiosk-decoder --image markito/qr-decode:v1 -n markito`
+`kn service create kiosk-encoder --image markito/qr-encode:v1 -n markito`
 
 Hit the endpoint to test using curl or a browser. To obtain the URL for the service use `kn service get` and use the value from the domain column. 
 
 ## Create the kiosk-decoder service: 
 
-`kn service create kiosk-encoder --image markito/qr-encode:v1 -n markito`
+`kn service create kiosk-decoder --image markito/qr-decode:v1 -n markito`
 
 ## Bonus: Add some load to the system
 
