@@ -63,7 +63,7 @@ Hit the endpoint to test using curl or a browser. To obtain the URL for the serv
 
 In order to show how auto-scale works, you can add some load to the cluster using a tool like `wrk`.  There is a shell script under the `qr-encode` project that can be used to cause some load for 30s.
 
-`wrk -t10 -c50 -d30s  http://kiosk-encoder.markito.apps.openshift.codeready.cloud/encode`
+`wrk -t10 -c10 -d30s  http://kiosk-encoder.markito.apps.openshift.codeready.cloud/encode`
 
 Use the Openshift console to visualize pods coming up and down or monitor the live traffic using Kiali. 
 
