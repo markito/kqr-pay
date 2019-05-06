@@ -27,7 +27,7 @@ Let's start by creating one of the services using `kn` - Which is the official K
 
 Once you have a `kn` binary in your `$PATH` proceed to the next steps. 
 
-We will also use `knctl` in one of the examples below. Download the binary from [HERE]
+We will also use `knctl` in one of the examples below. Download the binary from [HERE]
 
 # Building the services
 
@@ -101,7 +101,7 @@ Then create a new revision of the service:
 
 Now rollout traffic to the new version of the application, but to peform some A/B testing we'll give it 50% of traffic.
 
-`knctl rollout --route quarkus-kiosk -p quarkus-kiosk:latest=50% -p quarkus-kiosk:previous=50%` 
+`knctl rollout --route quarkus-kiosk -p quarkus-kiosk:latest=50% -p quarkus-kiosk:previous=50%`
 
 Observe the traffic going to the different versions of the service using Kiali.
 
