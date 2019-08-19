@@ -17,19 +17,15 @@ The serverless aspects of the application allow for the system to auto-scale bas
 ## Requirements
 
 - An OpenShift 4 cluster with:
-    - Knative v0.4+ 
-    - Tekton v0.1+
+    - Knative v0.7+ 
+    - Tekton v0.6+
     - Istio and Kiali
-    - Knative OpenShift Ingress 
-        `oc apply --filename https://github.com/bbrowning/knative-openshift-ingress/releases/download/v0.0.1/release.yaml`
-- `kn`, `knctl`, `s2i` and `docker` on the development environment.
+- `kn`, `s2i` and `docker` on the development environment.
 
 ## Setup 
 Let's start by creating one of the services using `kn` - Which is the official Knative CLI, still in early stages and under development. At the time I'm writing this there are no released builds for `kn` yet, so you will have to build one manually following [these instructions](https://github.com/knative/client/blob/master/DEVELOPMENT.md#building-knative-client).
 
 Once you have a `kn` binary in your `$PATH` proceed to the next steps. 
-
-We will also use `knctl` in one of the examples below. Download the binary from https://github.com/cppforlife/knctl/releases
 
 # Building the services
 
@@ -55,7 +51,7 @@ Push the image to a container registry. For example: `docker push markito/qr-dec
 
 `kn service create kiosk-encoder --image markito/qr-encode:v1 -n markito`
 
-Hit the endpoint to test using curl or a browser. To obtain the URL for the service use `kn service get` and use the value from the domain column. 
+Hit the endpoint ("kiosk-encoder/encode") to test using curl or a browser. To obtain the URL for the service use `kn service get` and use the value from the domain column. 
 
 ## Create the kiosk-decoder service: 
 
@@ -85,11 +81,9 @@ To build the Quarkus version of the kiosk application, use the plugin integrated
 
 ### Create the quarkus-decoder service
 
-`knctl deploy -s quarkus-kiosk -i markito/quarkus-decoder:v1 --managed-route=false`
+`kn service create quarkus-qrdecoder --image markito/quarkus-decoder:v1 -n markito`
 
-This will create a service but not yet expose a route to it. Using Knative service rollout strategy we will use some predefined revision labels to direct traffic at a given revision. Since we have a single revision available let's send 100% of the traffic to it.
-
-`knctl rollout --route quarkus-kiosk -p quarkus-kiosk:latest=100%`
+This will create a new Knative service and since we have a single revision available it will receive 100% of the traffic.
 
 Now let's modify something in our application, like the *background color* of the landing page, then build and deploy a new version of the service.
 
@@ -99,13 +93,24 @@ PS: Note the use of `v2` as part of the tag.
 
 Then create a new revision of the service:
 
-`knctl deploy -s quarkus-kiosk -i markito/quarkus-decoder:v2 --managed-route=false`
+`kn service update quarkus-qrdecoder --image markito/quarkus-decoder:v2 -n markito`
 
-Now rollout traffic to the new version of the application, but to peform some A/B testing we'll give it 50% of traffic.
+List the revisions available for a given service with `kn revision list`:
 
-`knctl rollout --route quarkus-kiosk -p quarkus-kiosk:latest=50% -p quarkus-kiosk:previous=50%`
+```
+kn revision list -s quarkus-qrdecoder
+NAME                        SERVICE             GENERATION   AGE     CONDITIONS   READY   REASON
+quarkus-qrdecoder-dnhlx-3   quarkus-qrdecoder   2            46m     3 OK / 4     True
+quarkus-qrdecoder-gwbgs-1   quarkus-qrdecoder   1            6h41m   3 OK / 4     True
+```
 
-Observe the traffic going to the different versions of the service using Kiali.
+Now using the name of these revisions let's peform some A/B testing and give them 50% of traffic each.
+
+`kn service update quarkus-qrdecoder --traffic quarkus-qrdecoder-gwbgs-1=50,quarkus-qrdecoder-dnhlx-3=50`
+
+Please note that the revision names might differ on your environment. 
+
+Observe the traffic going to the different versions of the service using Kiali or by accessing the service URL.
 
 # Automating the build and deployment steps with a Tekton pipeline 
 
