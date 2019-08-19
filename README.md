@@ -67,7 +67,7 @@ Use the Openshift console to visualize pods coming up and down or monitor the li
 
 ## Bonus: Create the Quarkus version of the kiosk-decoder
 
-Now we will switch gears a bit and use a different tool to create Knative services (`knctl`) and deploy a Quarkus based application. If you cloned this repository the source code for this app is under the quarkus folder.
+Create a new Knative service and deploy a Quarkus based application. If you cloned this repository the source code for this app is under the quarkus folder.
 
 ### Build a container for the Quarkus application
 
