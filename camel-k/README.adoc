@@ -1,14 +1,3 @@
-
-- Requirements: 
-
-Download kamel CLI from https://github.com/apache/camel-k/releases
-OpenShift 4.x
-Knative 0.7+
-
-- Install:
-
-Note that installation is required per namespace. 
-
 From camel-k/camel-k-router
 
 - Install:
@@ -28,18 +17,17 @@ $ oc create secret generic salesforce --from-file= src/main/resources/applicatio
 [IMPORTANT]
 ====
 The output when you replce resources should be like:
-
 [source]
-----
+---
 $ oc replace --force -f src/main/resources/camel-k-builder.yaml
 role.rbac.authorization.k8s.io "camel-k-builder" deleted
 role.rbac.authorization.k8s.io/camel-k-builder replaced
-----
+---
 
 To check that the patch is applied successfully, check the camel-k-builder role that should contains something like:
 
 [source, yaml]
-----
+---
 - apiGroups:
   - ""
   resources:
@@ -49,7 +37,7 @@ To check that the patch is applied successfully, check the camel-k-builder role 
   - get
   - list
   - watch
-----
+---
 
 The role installed by default does not list `configmaps` among the resources.
 ====
