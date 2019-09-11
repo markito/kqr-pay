@@ -1,0 +1,24 @@
+
+From camel-k/camel-k-router
+
+- Install:
++
+[source]
+----
+$ kamel install
+$ oc replace --force -f src/main/resources/camel-k-builder.yaml
+$ oc create secret generic salesforce --from-file= src/main/resources/application.properties
+----
+
+[NOTE]
+====
+`src/main/resources/application.properties` is a skeleton, you need to add your own salesforce credentials and ... don't push it to github ;)
+====
+
+- Run:
++
+[source]
+----
+kamel run -t gc.enabled=false --dev payment-service.groovy
+kamel run -t gc.enabled=false --dev src/main/groovy/request-router.groovy --dependency=mvn:com.github.lburgazzoli/camel-k-kqr-pay-support/1.0.0 --secret=salesforce
+----
