@@ -10,8 +10,8 @@ import java.time.LocalDate
 
 def createOrder = {
     Order order = new Order()
-    order.accountId = '0011v00002GdDooAAF'
-    order.contractId = '8001v000002hNyRAAU'
+    order.accountId = '0011R00002Io2wM'
+    order.contractId = '8001R000007mkoW'
     order.effectiveDate = LocalDate.now()
     order.status = Order_StatusEnum.DRAFT
     return order
@@ -24,6 +24,7 @@ def itemIsInStock = {
 from('knative:endpoint/camel-router')
     .unmarshal()
         .json(JsonLibrary.Jackson, Map.class)
+        .log('${body}')
     .choice()
         .when().body(itemIsInStock)
             .marshal()
@@ -38,4 +39,5 @@ from('knative:endpoint/camel-router')
                 .json(JsonLibrary.Jackson, Map.class)
             .setBody(simple('Order number: ${body[OrderNumber]}'))
     .end()
+    .log('${body}')
 
