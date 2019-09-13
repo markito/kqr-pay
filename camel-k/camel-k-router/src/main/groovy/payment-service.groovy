@@ -4,5 +4,5 @@
 
 from('knative:endpoint/payment-service')
     .setBody(constant('in stock'))
-    .log('${body}')
+    .log('payment processed for : ${body}')
 
