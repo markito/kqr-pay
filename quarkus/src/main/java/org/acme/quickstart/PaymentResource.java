@@ -129,11 +129,11 @@ public class PaymentResource {
         String postUrl = System.getenv("PAYMENT_SERVICE"); //"http://127.0.0.1:5000/";
 
         WebTarget webTarget = client.target(postUrl);
-        WebTarget paymentTarget = webTarget.path("payment");
+        // WebTarget paymentTarget = webTarget.path("payment");
         
         String payload= jsonString;
 
-        Response response = paymentTarget.request().post(Entity.json(payload));
+        Response response = webTarget.request().post(Entity.json(payload));
 
         if (response.getStatus() == 200) {
             String result = response.readEntity(String.class);

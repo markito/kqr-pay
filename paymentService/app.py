@@ -22,11 +22,11 @@ def signal_term_handler(signal, frame):
     sys.exit(0)
 
 app = Flask(__name__)
-@app.route('/')
-def index():
-    return "Hello, World! This is the payment service. "
+# @app.route('/')
+# def index():
+#     return "Hello, World! This is the payment service. "
 
-@app.route('/payment', methods=['POST'])
+@app.route('/', methods=['POST'])
 def payment(): 
     req_data = request.get_json()
     
