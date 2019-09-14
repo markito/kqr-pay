@@ -1,7 +1,16 @@
 
 From camel-k/camel-k-router
 
+- Requirements: 
+
+Download kamel CLI from https://github.com/apache/camel-k/releases
+OpenShift 4.x
+Knative 0.7+
+
 - Install:
+
+Note that installation is required per namespace. 
+
 +
 [source]
 ----

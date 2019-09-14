@@ -12,10 +12,9 @@ public class PaymentResourceTest {
     @Test
     public void testHelloEndpoint() {
         given()
-          .when().get("/qr-decode-quarkus")
+          .when().get("/")
           .then()
-             .statusCode(200)
-             .body(is("hello"));
+             .statusCode(200);
     }
 
 }
