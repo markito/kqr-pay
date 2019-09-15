@@ -18,26 +18,26 @@ def createOrder = {
 } as java.util.function.Function<Object, Object>
 
 def itemIsInStock = {
-    return it.containsKey('virtual')
+    return it.get('productIds').contains('v')
 } as java.util.function.Function<Object, Object>
 
 from('knative:endpoint/camel-router')
-    .setHeader('jsonbody', simple('${body}'))
+    .log('\n\nreceived order : ${body}\n')
+    .setProperty('jsonbody', simple('${body}'))
     .to('knative:endpoint/payment-service')
-    .setBody(simple('${header.jsonbody}'))
+    .log('\npayment processed : ${body}\n')
+    .setBody(simple('${exchangeProperty.jsonbody}'))
     .unmarshal().json(JsonLibrary.Jackson, Map.class)
     .choice()
         .when().body(itemIsInStock)
-            .log('calling salesforce')
+            .log('\nPlacing order for virtual items in Salesforce\n')
             .transform().body(createOrder)
             .to('salesforce:createSObject')
             .transform(simple('${body.id}'))
             .to('salesforce:getSObject?sObjectName=Order&rawPayload=true')
             .unmarshal()
                 .json(JsonLibrary.Jackson, Map.class)
+            .log('\nSalesforce order created ${body[OrderNumber]}\n')
             .setBody(simple('Order number: ${body[OrderNumber]}'))
-        .otherwise()
-            .log('no virtual items')
     .end()
-    .log('${body}')
 
