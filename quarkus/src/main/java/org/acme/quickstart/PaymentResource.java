@@ -3,23 +3,13 @@ package org.acme.quickstart;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
 
 import javax.imageio.ImageIO;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -30,7 +20,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
@@ -69,18 +58,21 @@ public class PaymentResource {
     public Response decodeQRCode(@MultipartForm FormData formData) throws IOException {
 
         if (formData.getQrFile() == null || formData.getQrFile().length() == 0) {
-            ResponseBuilder response = Response.status(Status.BAD_REQUEST);
+            final ResponseBuilder response = Response.status(Status.BAD_REQUEST);
             response.header("Reason", "No QRCode file was uploaded (use form parameter 'file')");
             return response.build();
         }
 
+        ResponseBuilder response = Response.noContent();
         try {
-            Result result = qrParser(formData);
-            ResponseBuilder response = Response.ok(result.getText(), MediaType.APPLICATION_JSON);
-            
             // read values from QR code
-            Response paymentResponse = postPayment(result.getText());
+            final Result qrContent = qrParser(formData.getQrFile());
+            // call PAYMENT_SERVICE endpoint
+            final Response paymentResponse = postPayment(qrContent.getText());
             if (paymentResponse.getStatus() == 200) {
+                final String responseFromPayment = paymentResponse.readEntity(String.class);
+                
+                response = Response.ok(responseFromPayment, MediaType.APPLICATION_JSON);
                 return response.build();
             } else {
                 return response.status(Status.UNAUTHORIZED).build();
@@ -88,23 +80,30 @@ public class PaymentResource {
 
         } catch (NotFoundException e) {
             System.out.println("There is no QR code in the image." + e.getMessage());
-            return null;
+            return Response.serverError().build();
         }
     }
 
-    // private Order parseStringToOrder(Result result) {
-    //     Jsonb jsonb = JsonbBuilder.create();
-    //     Map map = jsonb.fromJson(result.getText(),Map.class);
-    //     Order order = new Order(); 
-    //     order.productIds = new ArrayList<>();
-    //     order.
+    private boolean hasValidExtension(String fileName) {
+        final ArrayList<String> VALID_EXTENSIONS = new ArrayList<String>();
+        VALID_EXTENSIONS.add("png");
+        VALID_EXTENSIONS.add("jpeg");
+        VALID_EXTENSIONS.add("gif");
 
-        
-    //     return map;
-    // }
+        boolean result = false;
+        for (String ext : VALID_EXTENSIONS){
+            if (fileName.endsWith(ext)) {
+                result = true;
+            }
+        }
+        return result;
+    }
 
-    private Result qrParser(FormData formData) throws IOException, NotFoundException {
-        BufferedImage bufferedImage = ImageIO.read( formData.getQrFile());
+    private Result qrParser(File uploadedFile) throws IOException, NotFoundException {
+
+        // TODO: Add file extension validation 
+
+        BufferedImage bufferedImage = ImageIO.read(uploadedFile);
 
         LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -122,10 +121,8 @@ public class PaymentResource {
     }
 
     private Response postPayment(String jsonString) {
-        System.out.println(jsonString);
 
         Client client = ClientBuilder.newClient();
-        // Example: http://<host>/payment?orderNumber=123&email=serverless-interest@redhat.com&amount=100
         String postUrl = System.getenv("PAYMENT_SERVICE"); //"http://127.0.0.1:5000/";
 
         WebTarget webTarget = client.target(postUrl);
@@ -136,15 +133,17 @@ public class PaymentResource {
         Response response = webTarget.request().post(Entity.json(payload));
 
         if (response.getStatus() == 200) {
-            String result = response.readEntity(String.class);
-            System.out.println(result);
+            String result = response.readEntity(String.class);            
+            return Response.ok(result, MediaType.APPLICATION_JSON).build();
         } else {
             System.err.println(String.format("Error processing payment.\n" + 
             "HTTP Status code: %d \n" +
             "HTTP Response: %s \n", response.getStatus(),response.readEntity(String.class)));
+            // return Response.status(503, "{'status': 'Error processing payment'}").build();
+            return Response.ok("{'status': 'Error processing payment'}", MediaType.APPLICATION_JSON).build();
         }
 
-        return response;//  ClientResponse.noContent().build();
+        // return response;//  ClientResponse.noContent().build();
 
     }
 

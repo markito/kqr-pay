@@ -34,9 +34,13 @@ def payment():
         orderNumber = req_data['orderNumber']
         amount = req_data['amount']
         email = "serverless-interest@redhat.com"
-        return _stripePayment(amount, email)
+        try: 
+            result = _stripePayment(amount, email)
+            return result
+        except Exception as error: 
+            return "{'errorMessage': '%s'}" % (error) 
     else:
-        return False
+        return "{'errorMessage': 'Invalid payload for payment request. %s'}" % (req_data)
 
 def _validateRequest(req_data):
     if ('orderNumber' in req_data and 'amount' in req_data):
@@ -46,5 +50,5 @@ def _validateRequest(req_data):
 
 if __name__ == "__main__":
     signal.signal(signal.SIGTERM, signal_term_handler)
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=9090)
 

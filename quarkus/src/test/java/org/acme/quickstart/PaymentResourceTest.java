@@ -1,10 +1,10 @@
 package org.acme.quickstart;
 
-import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 public class PaymentResourceTest {
@@ -14,7 +14,7 @@ public class PaymentResourceTest {
         given()
           .when().get("/")
           .then()
-             .statusCode(200);
+            .statusCode(200);
     }
-
+ 
 }
