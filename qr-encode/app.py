@@ -7,17 +7,15 @@
 from flask import Flask, send_file
 from flask import request
 from io import BytesIO
-from money.money import Money
-from money.currency import Currency
-from money.money import Money
 import traceback
 import logging
 import qrcode
 import signal
 import sys
+import json
+import uuid
 
 app = Flask(__name__)
-DEFAULT_ID = "-1111111111"
 
 def _serve_pil_image(pil_img):
     img_io = BytesIO()
@@ -25,21 +23,16 @@ def _serve_pil_image(pil_img):
     img_io.seek(0)
     return send_file(img_io, mimetype='image/jpeg')
 
-@app.route('/encode', methods=['GET', 'POST'])
+
+@app.route('/', methods=['GET', 'POST'])
 def encode():
-    # origin location for the transaction
-    source = request.args.get('source', default = "Red Hat Summit 2019", type = str)
-    # transaction id
-    txId = request.args.get('id', default = DEFAULT_ID, type = str)
-    amount = request.args.get('amount', default = "0.0", type = str)
+    # request params to dict
+    dataFromURL = request.args.to_dict()
+    dataFromURL.update( {'system' : "RHTE2019 OpenShift Serverless"} )
+    dataFromURL.update( {'orderNumber' : str(uuid.uuid1())} )
     # transaction total
     try:
-        if (txId == DEFAULT_ID):
-            img = qrcode.make(source + ";" + txId + ";" + amount)
-            return _serve_pil_image(img)
-        else: 
-            money_amount = Money(amount, Currency.USD)
-            img = qrcode.make(source + ";" + txId + ";" + money_amount.format('en_US'))
+        img = qrcode.make(json.dumps(dataFromURL))
         return _serve_pil_image(img)
     except Exception as e:
         logging.error(traceback.format_exc())

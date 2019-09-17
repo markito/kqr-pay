@@ -1,0 +1,63 @@
+
+- Requirements: 
+
+Download kamel CLI from https://github.com/apache/camel-k/releases
+OpenShift 4.x
+Knative 0.7+
+
+- Install:
+
+Note that installation is required per namespace. 
+
+From camel-k/camel-k-router
+
+- Install:
++
+[source]
+----
+$ kamel install --wait
+$ oc replace --force -f src/main/resources/camel-k-builder.yaml
+$ oc create secret generic salesforce --from-file= src/main/resources/application.properties
+----
++
+[NOTE]
+====
+`src/main/resources/application.properties` is a skeleton, you need to add your own salesforce credentials and ... don't push it to github ;)
+====
++
+[IMPORTANT]
+====
+The output when you replce resources should be like:
+
+[source]
+----
+$ oc replace --force -f src/main/resources/camel-k-builder.yaml
+role.rbac.authorization.k8s.io "camel-k-builder" deleted
+role.rbac.authorization.k8s.io/camel-k-builder replaced
+----
+
+To check that the patch is applied successfully, check the camel-k-builder role that should contains something like:
+
+[source, yaml]
+----
+- apiGroups:
+  - ""
+  resources:
+  - events
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+----
+
+The role installed by default does not list `configmaps` among the resources.
+====
+
+- Run:
++
+[source]
+----
+kamel run -t gc.enabled=false --dev src/main/groovy/payment-service.groovy
+kamel run -t gc.enabled=false --dev src/main/groovy/request-router.groovy --dependency=mvn:com.github.lburgazzoli/camel-k-kqr-pay-support/1.0.0 --secret=salesforce
+----
