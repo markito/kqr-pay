@@ -26,6 +26,7 @@ from('knative:endpoint/camel-router')
     .setProperty('jsonbody', simple('${body}'))
     .to('knative:endpoint/payment-service')
     .log('\npayment processed : ${body}\n')
+    /*
     .setBody(simple('${exchangeProperty.jsonbody}'))
     .unmarshal().json(JsonLibrary.Jackson, Map.class)
     .choice()
@@ -40,4 +41,5 @@ from('knative:endpoint/camel-router')
             .log('\nSalesforce order created ${body[OrderNumber]}\n')
             .setBody(simple('Order number: ${body[OrderNumber]}'))
     .end()
+    */
 
