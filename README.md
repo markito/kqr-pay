@@ -209,8 +209,10 @@ kamel run -t gc.enabled=false --dev src/main/groovy/request-router.groovy --depe
 TBD.
 
 # Useful alias commands used in live demos
+```
 alias kn-kiosk='echo "kn service create kiosk --image=markito/kiosk:v1 --requests-memory=100Mi --concurrency-limit=1"; kn service create kiosk --image=markito/kiosk:v1 --requests-memory=100Mi --concurrency-limit=1'
 alias kn-payment='echo "kn service create payment-service --image=markito/payment-service:v1 --requests-memory=100Mi --concurrency-limit=1"; kn service create payment-service --image=markito/payment-service:v1 --requests-memory=100Mi --concurrency-limit=1'
 alias kn-store='echo "kn service create store-app --force --image=markito/store-app:v1 --requests-memory=300Mi --concurrency-limit=10 --env PAYMENT_SERVICE=http://request-router.namespace.cluster-url"; kn service create store-app --force --image=markito/store-app:v1 --requests-memory=300Mi --concurrency-limit=10 --env PAYMENT_SERVICE="http://request-router.namespace.cluster-url"'
 alias kamel-router='echo "kamel run -t gc.enabled=false --dev src/main/groovy/request-router.groovy --dependency=mvn:com.github.lburgazzoli/camel-k-kqr-pay-support/1.0.0 --secret=salesforce"; kamel run -t gc.enabled=false --dev src/main/groovy/request-router.groovy --dependency=mvn:com.github.lburgazzoli/camel-k-kqr-pay-support/1.0.0 --secret=salesforce'
 alias kn-load='echo "wrk -t10 -c10 -d30s http://kiosk.namespace.cluster-url/\?productIds\=\[1,2,3,4\]\&amount\=5000"; wrk -t10 -c10 -d30s http://kiosk.namespace.cluster-url/\?productIds\=\[1,2,3,4\]\&amount\=5000'
+```
