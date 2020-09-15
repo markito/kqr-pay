@@ -28,7 +28,7 @@ def _serve_pil_image(pil_img):
 def encode():
     # request params to dict
     dataFromURL = request.args.to_dict()
-    dataFromURL.update( {'system' : "RHTE2019 OpenShift Serverless"} )
+    dataFromURL.update( {'system' : "Demo OpenShift Serverless"} )
     dataFromURL.update( {'orderNumber' : str(uuid.uuid1())} )
     # transaction total
     try:
