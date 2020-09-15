@@ -3,7 +3,7 @@ Sample serverless QR payment system using Knative and Camel-K.
 
 # Application Architecture
 
-![Demo Flow](img/demo-flow.jpg?raw=true "Demo Flow")
+![Demo Flow](img/arch.png?raw=true "OpenShift Console")
 
 QR (quick response) codes are increasing in popularity for a variety of use cases, from loyaty programs to complete **cashless** payment systems, which is what we will simulate on this tutorial as a sample serverless application.
 
@@ -33,7 +33,9 @@ Once you have a `kn` binary in your `$PATH` proceed to the next steps.
 
 >Skip this step if you just want to recreate/run the demo.
 
-<!-- >Skip this step if you just want to recreate/run the demo.
+## Quick build
+
+Run `./build.sh`
 
 ## Build Kiosk QR encoder
 
@@ -119,6 +121,10 @@ Please note that the revision names might differ on your environment.
 Observe the traffic going to the different versions of the service using Kiali or by accessing the service URL. -->
 
 # Running the demo
+
+## Quick run
+
+Run `./deploy.sh`
 
 ## Container images
 
