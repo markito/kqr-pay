@@ -1,5 +1,5 @@
 # kqr-pay
-Sample serverless QR payment system using Knative and Camel-K.
+Sample serverless QR payment system using Knative, Tekton and Camel-K.
 
 # Application Architecture
 
