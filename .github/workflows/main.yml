@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v0.0.1
+        env:
+          OPENSHIFT_USER: markito
+          OPENSHIFT_NAMESPACE: markito
+
+        with:
+          # URL to your OpenShift cluster.
+          # Refer to Step 2.
+          openshift_server_url: ${{ secrets.OPENSHIFT_URL }}
+
+          # Authentication Token. Can use username and password instead.
+          # Refer to Step 3.
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+
+          # Credentials if desired instead of Token.
+          # Token overrides username and password if all 3 are set.
+          openshift_username: ${{ env.OPENSHIFT_USER }}
+          openshift_password: ${{ secrets.OPENSHIFT_PASSWORD }}
+
+          # This disables SSL certificate checking. Use this if you don't have the certificate authority data.
+          insecure_skip_tls_verify: true
+          # This method is more secure, if the certificate from Step 4 is available.
+          certificate_authority_data: ${{ secrets.CA_DATA }}
+
+          # Optional - this sets your Kubernetes context's current namespace after logging in.
+          namespace: ${{ env.OPENSHIFT_NAMESPACE }}
