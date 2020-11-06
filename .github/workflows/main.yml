@@ -22,7 +22,7 @@ jobs:
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v0.0.1
         env:
-          OPENSHIFT_USER: markito
+          OPENSHIFT_USER: github-action-sa
           OPENSHIFT_NAMESPACE: markito
 
         with:
