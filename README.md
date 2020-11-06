@@ -222,3 +222,4 @@ alias kn-store='echo "kn service create store-app --force --image=markito/store-
 alias kamel-router='echo "kamel run -t gc.enabled=false --dev src/main/groovy/request-router.groovy --dependency=mvn:com.github.lburgazzoli/camel-k-kqr-pay-support/1.0.0 --secret=salesforce"; kamel run -t gc.enabled=false --dev src/main/groovy/request-router.groovy --dependency=mvn:com.github.lburgazzoli/camel-k-kqr-pay-support/1.0.0 --secret=salesforce'
 alias kn-load='echo "wrk -t10 -c10 -d30s http://kiosk.namespace.cluster-url/\?productIds\=\[1,2,3,4\]\&amount\=5000"; wrk -t10 -c10 -d30s http://kiosk.namespace.cluster-url/\?productIds\=\[1,2,3,4\]\&amount\=5000'
 ```
+
