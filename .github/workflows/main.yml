@@ -22,7 +22,7 @@ jobs:
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v0.0.1
         env:
-          OPENSHIFT_USER: github-action-sa
+          OPENSHIFT_USER: markito
           OPENSHIFT_NAMESPACE: default
 
         with:
@@ -33,6 +33,11 @@ jobs:
           # Authentication Token. Can use username and password instead.
           # Refer to Step 3.
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+
+#           # Credentials if desired instead of Token.
+#           # Token overrides username and password if all 3 are set.
+#           openshift_username: ${{ env.OPENSHIFT_USER }}
+#           openshift_password: ${{ secrets.OPENSHIFT_PASSWORD }}
 
           # This disables SSL certificate checking. Use this if you don't have the certificate authority data.
           insecure_skip_tls_verify: true
