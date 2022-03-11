@@ -4,7 +4,7 @@ Flask==1.0.2
 itsdangerous==1.1.0
 Jinja2==2.10.1
 MarkupSafe==1.1.1
-Pillow==7.1.0
+Pillow==9.0.1
 py-money==0.4.0
 pytz==2019.1
 pyzbar==0.1.8
