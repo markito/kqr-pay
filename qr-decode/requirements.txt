@@ -2,7 +2,7 @@ Babel==2.6.0
 Click==7.0
 Flask==1.0.2
 itsdangerous==1.1.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 Pillow==9.0.1
 py-money==0.4.0
