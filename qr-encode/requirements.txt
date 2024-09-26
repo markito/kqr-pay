@@ -12,4 +12,3 @@ qrcode==6.1
 qrtools==0.0.2
 six==1.12.0
 Werkzeug==1.0.1
-
